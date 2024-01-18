@@ -24,7 +24,9 @@ class Flow:
         logging.basicConfig(format="%(levelname)s [%(module)s]: %(message)s")
 
     def __call__(self, value_dict: Mapping[str, Any]) -> Mapping[str, Any]:
-        """Run flow.
+        """Run flow.er the object has an attribute with the given name.
+
+This is done by calling getattr(obj, name) and catching AttributeError.
 
         Args:
             value_dict (Mapping[str, Any]): Input value dict.
@@ -32,6 +34,8 @@ class Flow:
         Returns:
             Mapping[str, Any]: Output value dict."""
         nodes = self._enter(value_dict)
+        #print("from_flow, nodes hasattr value_dict?: ", hasattr(nodes[0], "value_dict"))
+        #print("from flow, nodes[0].valu: ", nodes[0].value_dict)
         nodes = self.run(nodes)
         output_dict = self._exit(nodes)
         return output_dict

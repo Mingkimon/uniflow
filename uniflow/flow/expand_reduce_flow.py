@@ -41,12 +41,9 @@ class ExpandReduceFlow(Flow):
         Returns:
             Sequence[Node]: Nodes after running.
         """
+        nodes = nodes[0]
         nodes = self._expand_op(nodes)
         nodes = self._reduce_op(nodes)
-        print(nodes[0].value_dict)
-        print(len(nodes))
 
-
-        print("end of expand_reduce_flow.py")
         return nodes
 

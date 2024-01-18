@@ -28,15 +28,13 @@ class ExpandOp(Op):
         Returns:
             Sequence[Node]: Output nodes.
         """
-        if not root.value_dict:
+        if not hasattr(root, "value_dict"):
             print("root value dict is none")
             return None
         dic_1 = {}
         dic_2 = {}
-        print("from expand py")
-        prnit(root.value_dict)
         value_dict = self._transform(root.value_dict)
-        print(value_dict)
+        value_dict = value_dict[0]
         root_keys = list(value_dict.keys())
         mid = len(root_keys)//2
         for i in range(len(root_keys)):
@@ -47,7 +45,6 @@ class ExpandOp(Op):
             else:
                 dic_1[pair_key] = pair_value
 
-        expand_1 = Node(name=self.unique_name(), value_dict=dic_1, prev_nodes=[root])
-        expand_2 = Node(name=self.unique_name(), value_dict=dic_2, prev_nodes=[root])
-        print("yes printing")
+        expand_1 = Node(name= self.unique_name(), value_dict=dic_1, prev_nodes=[root])
+        expand_2 = Node(name= self.unique_name(), value_dict=dic_2, prev_nodes=[root])
         return [expand_1, expand_2]
