@@ -23,20 +23,25 @@ class ExpandOp(Op):
         """Call expand operation.
 
         Args:
-            nodes (Sequence[Node]): Input nodes.
+            root [Node]: Input node.
 
         Returns:
             Sequence[Node]: Output nodes.
         """
         if not root.value_dict:
+            print("root value dict is none")
             return None
         dic_1 = {}
         dic_2 = {}
-        root_keys = list(root.value_dict.keys())
+        print("from expand py")
+        prnit(root.value_dict)
+        value_dict = self._transform(root.value_dict)
+        print(value_dict)
+        root_keys = list(value_dict.keys())
         mid = len(root_keys)//2
         for i in range(len(root_keys)):
             pair_key = root_keys[i]
-            pair_value = root.value_dict[pair_key]
+            pair_value = value_dict[pair_key]
             if i < mid:
                 dic_1[pair_key] = pair_value
             else:
@@ -44,4 +49,5 @@ class ExpandOp(Op):
 
         expand_1 = Node(name=self.unique_name(), value_dict=dic_1, prev_nodes=[root])
         expand_2 = Node(name=self.unique_name(), value_dict=dic_2, prev_nodes=[root])
-        return expand_1, expand_2
+        print("yes printing")
+        return [expand_1, expand_2]

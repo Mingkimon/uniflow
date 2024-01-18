@@ -777,6 +777,47 @@ class RaterForGeneratedAnswerOpenAIGPT3p5Config(RaterConfig):
 
 
 ###########################################################
+#                   All Expand_Reduce Config              #
+###########################################################
+@dataclass
+class Expand_and_Reduce_Config:
+
+    flow_name: str
+    model_config: ModelConfig = field(default_factory=ModelConfig)
+    num_thread: int = 1
+    prompt_template: PromptTemplate = field(
+        default_factory=lambda: PromptTemplate(
+            instruction="""
+            Generate one question and its corresponding answer based on the last context in the last
+            example. Follow the format of the examples below to include context, question, and answer in the response.
+            """,
+            few_shot_prompt=[
+                Context(
+                    context="The quick brown fox jumps over the lazy black dog.",
+                    question="What is the color of the fox?",
+                    answer="brown.",
+                ),
+                Context(
+                    context="The quick brown fox jumps over the lazy black dog.",
+                    question="What is the color of the dog?",
+                    answer="black.",
+                ),
+            ],
+        )
+    )
+
+
+class ExpandReduceConfig(Expand_and_Reduce_Config):
+    """Transform Linear Config Class."""
+
+    flow_name: str = "ExpandReduceFlow"
+    prompt_template: PromptTemplate = field(
+        default_factory=lambda: PromptTemplate(instruction="", few_shot_prompt=[])
+    )
+    model_config: ModelConfig = field(default_factory=lambda: {})
+
+
+###########################################################
 #                    Pipeline Config                      #
 ###########################################################
 @dataclass
@@ -785,3 +826,5 @@ class PipelineConfig:
 
     extract_config: ExtractConfig = field(default_factory=ExtractConfig)
     transform_config: TransformConfig = field(default_factory=TransformConfig)
+    transform_config: ExpandReduceConfig = field(default_factory=ExpandReduceConfig)
+

@@ -1,13 +1,13 @@
 """Flow Factory Module."""
 from typing import Dict, List
 
-from uniflow.constants import EXTRACT, RATER, TRANSFORM
+from uniflow.constants import EXTRACT, RATER, TRANSFORM, EXPAND_REDUCE
 
 
 class FlowFactory:
     """Flow Factory Class."""
 
-    _flows = {EXTRACT: {}, TRANSFORM: {}, RATER: {}}
+    _flows = {EXTRACT: {}, TRANSFORM: {}, RATER: {}, EXPAND_REDUCE: {}}
 
     @classmethod
     def register(cls, name: str, flow_cls: "Flow") -> None:  # noqa: F821
@@ -18,6 +18,7 @@ class FlowFactory:
             flow_cls (Flow): Flow class.
         """
         if hasattr(flow_cls, "TAG") and flow_cls.TAG in cls._flows:
+            print("registered", flow_cls.TAG, "-----------------")
             cls._flows[flow_cls.TAG][name] = flow_cls
 
     @classmethod
@@ -33,6 +34,11 @@ class FlowFactory:
         Raises:
             ValueError: If no flow registered under the name.
         """
+        #print("name:", name)
+        #print("flow_type (in constant.py): ", flow_type)
+        #print("flow factory flows.get(flow_type):", cls._flows.get(flow_type))
+        #print(" -------------from flow_factory------------")
+        #print(cls._flows)
         flow_cls = cls._flows.get(flow_type).get(name)
         if not flow_cls:
             raise ValueError(f"No flow registered under '{name}'")

@@ -5,7 +5,7 @@ from uniflow.flow.flow import Flow
 
 from typing import Any, Dict, Sequence
 
-from uniflow.constants import EXTRACT
+from uniflow.constants import EXPAND_REDUCE
 from uniflow.flow.flow import Flow
 from uniflow.node import Node
 from uniflow.op.extract.load.image_op import ExtractImageOp, ProcessImageOp
@@ -14,15 +14,13 @@ from uniflow.op.extract.split.splitter_factory import SplitterOpsFactory
 from uniflow.op.model.llm_preprocessor import LLMDataPreprocessor
 
 
-class ExtractImageFlow(Flow):
+class ExpandReduceFlow(Flow):
     """Extract Image Flow Class."""
 
     TAG = EXPAND_REDUCE
 
     def __init__(
-        self,
-        model_config: Dict[str, Any],
-        splitter: str = PARAGRAPH_SPLITTER,
+        self
     ) -> None:
         """Extract Image Flow Constructor.
 
@@ -43,11 +41,12 @@ class ExtractImageFlow(Flow):
         Returns:
             Sequence[Node]: Nodes after running.
         """
-        output = []
-        for node in nodes:
-            e1, e2 = self._expand_op(node)
-            r1 = self._reduce_op(e1, e2)
-            output.append(r1)
+        nodes = self._expand_op(nodes)
+        nodes = self._reduce_op(nodes)
+        print(nodes[0].value_dict)
+        print(len(nodes))
 
-        return output
+
+        print("end of expand_reduce_flow.py")
+        return nodes
 
